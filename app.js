@@ -5,38 +5,47 @@ const Listing = require("./models/listing.js");
 
 const MONGODB_URL = "mongodb://127.0.0.1:27017/stayora";
 
-async function main(){
-    await mongoose.connect(MONGODB_URL);
+async function main() {
+  await mongoose.connect(MONGODB_URL);
 }
 
 main()
-    .then(()=>{
-        console.log("DB Connected Successfully!");
-    })
-    .catch(err => {
-        console.log(err);
-    });
+  .then(() => {
+    console.log("DB Connected Successfully!");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
-const app = express()
+const app = express();
 const port = 8080;
 
-app.listen(port,()=>{
-    console.log("Server Started at " + port);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
+
+app.listen(port, () => {
+  console.log("Server Started at " + port);
 });
 
-app.get("/testListing", async (req,res) => {
-    let sampletListing = new Listing({
-        title: "My New Villa",
-        description: "By the beach",
-        price: 1200,
-        location: "Kakinada, Andhra Pradesh",
-        country: "India"
-    });
+// app.get("/testListing", async (req,res) => {
+//     let sampletListing = new Listing({
+//         title: "My New Villa",
+//         description: "By the beach",
+//         price: 1200,
+//         location: "Kakinada, Andhra Pradesh",
+//         country: "India"
+//     });
 
-    await sampletListing.save();
-    console.log("Sample was saved");
-    res.send("Successfull Testing!");
+//     await sampletListing.save();
+//     console.log("Sample was saved");
+//     res.send("Successfull Testing!");
+// });
+
+app.get("/", (req, res) => {
+  res.send("Server Working!");
 });
-app.get("/",(req,res)=>{
-    res.send("Server Working!");
+
+app.get("/listings", async (req, res) => {
+  const allListings = await Listing.find({});
+  res.render("listings/index.ejs", { allListings });
 });
