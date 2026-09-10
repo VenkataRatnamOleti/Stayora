@@ -3,6 +3,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
 
 const MONGODB_URL = "mongodb://127.0.0.1:27017/stayora";
 
@@ -12,7 +13,7 @@ async function main() {
 
 main()
   .then(() => {
-    console.log("DB Connected Successfully!");
+    console.log("DB Connected Successfully!"); 
   })
   .catch((err) => {
     console.log(err);
@@ -25,6 +26,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "/public")));
+app.engine("ejs", ejsMate);
 
 app.listen(port, () => {
   console.log("Server Started at " + port);
