@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError.js");
+const listingSchema = require("./schema");
 
 const MONGODB_URL = "mongodb://127.0.0.1:27017/stayora";
 
@@ -34,6 +35,14 @@ app.engine("ejs", ejsMate);
 app.listen(port, () => {
   console.log("Server Started at " + port);
 });
+
+const validateListing = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message.join("\n"));
+    throw new ExpressError(400, errMsg);
+  }
+};
 
 // app.get("/testListing", async (req,res) => {
 //     let sampletListing = new Listing({
@@ -70,9 +79,7 @@ app.post(
   "/listings",
   wrapAsync(async (req, res) => {
     // let { title, description, image, price, country, location } = req.body;
-    if(!req.body.listing){
-      throw new ExpressError(400,"Send Valid Data");
-    }
+
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/");
@@ -103,8 +110,8 @@ app.put(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    if(!req.body.listing){
-      throw new ExpressError(400,"Send Valid Data");
+    if (!req.body.listing) {
+      throw new ExpressError(400, "Send Valid Data");
     }
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });
     res.redirect(`/listings/${id}`);
@@ -127,5 +134,5 @@ app.all("*path", (req, res, next) => {
 
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong" } = err;
-  res.status(statusCode).render("error.ejs",{message});
+  res.status(statusCode).render("error.ejs", { message });
 });
