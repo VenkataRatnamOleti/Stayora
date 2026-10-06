@@ -7,6 +7,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError.js");
 const listingSchema = require("./schema");
+const Review = require("./models/review.js");
 
 const MONGODB_URL = "mongodb://127.0.0.1:27017/stayora";
 
@@ -127,6 +128,21 @@ app.delete(
     res.redirect("/listings");
   }),
 );
+
+// Reviews
+// Post Route
+
+app.post("/listings/:id/reviews", async (req,res)=>{
+  let listing = await Listing.findById(req.params.id);
+  let newReview = new Review(req.body.review);
+
+  listing.reviews.push(newReview);
+
+  await newReview.save();
+  await listing.save();
+  console.log("Review Added to the Listing!");
+  res.redirect(`/listings/${listing._id}`);
+})
 
 app.all("*path", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
