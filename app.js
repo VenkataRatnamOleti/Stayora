@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
+const session = require("express-session");
 
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
@@ -32,12 +33,25 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
 
+const sessionOptions = {
+  secret: "mysuperscecretcode",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 3 * 24 * 60 * 60 * 1000,
+    maxAge: 3 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  },
+};
+
+app.use(session(sessionOptions));
+
 app.listen(port, () => {
   console.log("Server Started at " + port);
 });
 
-app.use("/listings",listings);
-app.use("/listings/:id/reviews",reviews);
+app.use("/listings", listings);
+app.use("/listings/:id/reviews", reviews);
 
 app.get("/", (req, res) => {
   res.redirect("/listings");

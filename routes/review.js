@@ -30,7 +30,6 @@ router.post(
 
     await newReview.save();
     await listing.save();
-    console.log("Review Added to the Listing!");
     res.redirect(`/listings/${listing._id}`);
   }),
 );
