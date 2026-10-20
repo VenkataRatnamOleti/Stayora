@@ -12,13 +12,8 @@ const listingSchema = new Schema({
     type: String,
   },
   image: {
-    type: String,
-    default:
-      "https://images.pexels.com/photos/12377231/pexels-photo-12377231.jpeg",
-    set: (v) =>
-      v === ""
-        ? "https://images.pexels.com/photos/12377231/pexels-photo-12377231.jpeg"
-        : v, // Used with forms
+    url: String,
+    filename: String,
   },
   price: {
     type: Number,
@@ -38,12 +33,12 @@ const listingSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",
-  }
+  },
 });
 
-listingSchema.post("findOneAndDelete", async (listing) =>{
-  if(listing){
-    await Review.deleteMany({_id:{$in:listing.reviews}});
+listingSchema.post("findOneAndDelete", async (listing) => {
+  if (listing) {
+    await Review.deleteMany({ _id: { $in: listing.reviews } });
   }
 });
 
