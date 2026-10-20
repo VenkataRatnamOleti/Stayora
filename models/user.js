@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { Passport } = require("passport");
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose").default || require("passport-local-mongoose");
 
