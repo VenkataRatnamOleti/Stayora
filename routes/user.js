@@ -15,8 +15,13 @@ router.post(
       let { username, email, password } = req.body;
       const newUser = new User({ username, email });
       const registeredUser = await User.register(newUser, password);
-      req.flash("success", "Welcome to Stayora!");
-      res.redirect("/listings");
+      req.login(registeredUser, (err) => {
+        if (err) {
+          return next(err);
+        }
+        req.flash("success", "Welcome to Stayora!");
+        res.redirect("/listings");
+      });
     } catch (err) {
       req.flash("error", err.message);
       res.redirect("/signup");
@@ -42,10 +47,10 @@ router.post(
 
 router.get("/logout", (req, res) => {
   req.logout((err) => {
-    if(err){
+    if (err) {
       return next(err);
     }
-    req.flash("success","You are logged out!");
+    req.flash("success", "You are logged out!");
     res.redirect("/listings");
   });
 });
