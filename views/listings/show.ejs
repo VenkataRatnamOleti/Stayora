@@ -46,13 +46,15 @@
                 <% for(review of listing.reviews) {%>
                     <div class="card col-5 ms-3 mb-3 pt-3">
                         <div class="card-body mb-3">
-                            <h5 class="card-title">John Doe</h5>
+                            <h5 class="card-title"> @<%= review.author.username %> </h5>
                             <p class="card-text"> <%= review.comment%></p>
                             <p class="card-text"> <%= review.rating%> &#11088;</p>
                         </div>
-                        <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3" method="POST">
-                            <button class="btn btn-sm btn-dark">Delete</button>
-                        </form>
+                        <% if(currUser && currUser._id.equals(review.author._id)) { %>
+                            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3" method="POST">
+                                <button class="btn btn-sm btn-dark">Delete</button>
+                            </form>
+                        <% } %>
                     </div>
                 <% } %>
             </div>
