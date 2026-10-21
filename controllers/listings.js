@@ -1,4 +1,7 @@
 const Listing = require("../models/listing.js");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapToken = process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
   const allListings = await Listing.find({});
@@ -10,11 +13,19 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createListing = async (req, res) => {
+  let response = await geocodingClient
+    .forwardGeocode({
+      query: req.body.listing.location,
+      limit: 2,
+    })
+    .send();
+
   let url = req.file.path;
   let filename = req.file.filename;
   const newListing = new Listing(req.body.listing);
   newListing.image = { url, filename };
   newListing.owner = req.user._id;
+  newListing.geometry = response.body.features[0].geometry;
   await newListing.save();
   req.flash("success", "New Listing Created!");
   res.redirect("/listings");
@@ -39,7 +50,9 @@ module.exports.renderEditForm = async (req, res) => {
     req.flash("error", "Listing you requested for does not exist!");
     return res.redirect("/listings");
   }
-  res.render("listings/edit.ejs", { listing });
+  let originalImageUrl = listing.image.url;
+  originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
+  res.render("listings/edit.ejs", { listing, originalImageUrl });
 };
 
 module.exports.updateListing = async (req, res) => {
@@ -47,7 +60,20 @@ module.exports.updateListing = async (req, res) => {
   if (!req.body.listing) {
     throw new ExpressError(400, "Send Valid Data");
   }
+  let response = await geocodingClient
+    .forwardGeocode({
+      query: req.body.listing.location,
+      limit: 2,
+    })
+    .send();
+
   let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+
+  if (typeof req.body.listing.location !== "undefined") {
+    listing.geometry = response.body.features[0].geometry;
+    await listing.save();
+  }
+
   if (typeof req.file !== "undefined") {
     let url = req.file.path;
     let filename = req.file.filename;
