@@ -19,11 +19,11 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-const MONGODB_URL = "mongodb://127.0.0.1:27017/stayora";
-// const ATLAS_URL = process.env.ATLASDB_URL;
+// const MONGODB_URL = "mongodb://127.0.0.1:27017/stayora";
+const ATLAS_URL = process.env.ATLASDB_URL;
 
 async function main() {
-  await mongoose.connect(MONGODB_URL);
+  await mongoose.connect(ATLAS_URL);
 }
 
 main()
@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
 
 const store = MongoStore.create({
-  mongoUrl: MONGODB_URL,
+  mongoUrl: ATLAS_URL,
   crypto: {
     secret: process.env.SECRET
   },
