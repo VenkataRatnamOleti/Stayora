@@ -18,6 +18,7 @@ router
   );
 
 router.get("/new", isLoggedIn, listingController.renderNewForm);
+router.get("/search", isLoggedIn, listingController.showSearchedListing);
 
 router
   .route("/:id")

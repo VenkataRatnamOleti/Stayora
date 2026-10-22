@@ -240,9 +240,39 @@ body {
   color: white !important;
 }
 
+.search-btn i,
+.authenticate i,
+.nav-link i {
+  display: inline;
+  margin-right: 0.5rem;
+}
+
+.authenticate {
+  border-radius: 25px;
+  flex-shrink: 0;
+  border: 1px solid #b0b0b0;
+  padding: 1rem;
+  padding-left: 1rem !important;
+  height: 3rem;
+  margin-left: 1rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.authenticate a {
+  color: rgb(204, 0, 204) !important;
+}
+
+.authenticate a:hover {
+  background-color: none !important;
+  color: black !important;
+}
+
 .search-input {
   border-radius: 25px !important;
-  width: 50rem !important;
+  width: 30rem !important;
+  padding-left: 1.5rem !important;
 }
 
 .search-input:focus {

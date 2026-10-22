@@ -4,6 +4,12 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
+  if (req.query.category) {
+    const category = req.query.category;
+    const allListings = await Listing.find({ tags: { $in: category } });
+    return res.render("listings/index.ejs", { allListings });
+  }
+
   const allListings = await Listing.find({});
   res.render("listings/index.ejs", { allListings });
 };
@@ -89,4 +95,25 @@ module.exports.destoryListing = async (req, res) => {
   await Listing.findByIdAndDelete(id);
   req.flash("success", "Listing Deleted!");
   res.redirect("/listings");
+};
+
+module.exports.showSearchedListing = async (req, res) => {
+  if (req.query.search) {
+    const searchQuery = req.query.search;
+    const regex = new RegExp(searchQuery, "i");
+    let queryFilter = {
+      $or: [
+        { title: regex },
+        { description: regex },
+        { tags: regex },
+        { location: regex },
+        { country: regex },
+      ],
+    };
+    const allListings = await Listing.find(queryFilter);
+    return res.render("listings/index.ejs", { allListings });
+  }
+
+  const allListings = await Listing.find({});
+  res.render("listings/index.ejs", { allListings });
 };

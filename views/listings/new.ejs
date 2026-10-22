@@ -2,7 +2,7 @@
 <body>
     <div class="row mt-3">
         <div class="col-8 offset-2">
-            <h3>Create new Listing</h3> 
+            <h3 class="text-center">Add to Stayora</h3> 
             <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
@@ -36,6 +36,26 @@
                     <input type="text" class="form-control" name="listing[country]" placeholder="India" required>
                     <div class="invalid-feedback">Valid Country is Needed</div>
                 </div>
+                <div class="mb-3">
+                    <label for="listing[tags]" class="form-label">Add Tags</label>
+                    <select id="flavors" name="listing[tags]" multiple size="1" class="form-select">
+                        <option value="trending">Trending</option>
+                        <option value="rooms">Rooms</option>
+                        <option value="iconic-cities">Iconic Cities</option>
+                        <option value="mountains">Mountains</option>
+                        <option value="castles">Castles</option>
+                        <option value="amazing-pools">Amazing Pools</option>
+                        <option value="camping">Camping</option>
+                        <option value="hotels">Hotels</option>
+                        <option value="farms">Farms</option>
+                        <option value="arctic">Arctic</option>
+                        <option value="buildings">Buildings</option>
+                        <option value="premiums-baths">Premiums Baths</option>
+                        <option value="luxury-couch">Luxury Couches</option>
+                        <option value="pets-allowed">Pets Allowed</option>
+                        <option value="houses">Houses</option>
+                    </select>
+                </div>         
                 <button class="btn btn-dark add-btn">Add</button>
             </form>
         </div>
