@@ -60,6 +60,20 @@ body {
   text-align: center;
 }
 
+.f-madeby{
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 5;
+  background-color: rgba(204, 0, 204,0.6);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.75rem;
+}
+
+.f-madeby:hover{
+    background-color: rgba(204, 0, 204, 0.4);
+}
+
 /* Cards */
 .listing-card {
   border: none !important;
@@ -394,6 +408,10 @@ body {
 
   .navbar-collapse .navbar-nav {
     width: 100%;
+  }
+
+  .f-madeby{
+    width: 30%;
   }
 
   .search-form {
