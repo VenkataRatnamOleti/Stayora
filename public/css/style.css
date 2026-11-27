@@ -153,6 +153,34 @@ body {
   padding-right: 0;
 }
 
+.review-wrapper{
+  position: relative;
+}
+
+.glass-blur {
+  filter: blur(3px);
+  display: flex;
+}
+
+.review-login-btn{
+  color: rgb(204, 0, 204);
+  text-decoration: none;
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(204, 0, 204);
+}
+
+.review-login-btn:hover{
+  color: white;
+  background-color: rgb(204, 0, 204);
+  transition: all 0.2s ease-in-out;
+}
+
 #map {
   border-radius: 1rem;
   height: 400px;
